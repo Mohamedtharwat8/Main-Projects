@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-using API.Data;
-=======
  
->>>>>>> Stashed changes
 using Core.interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
