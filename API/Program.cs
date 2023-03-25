@@ -15,6 +15,7 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
 ///dotnet ef migrations add initialCreate -o Data/Migrations
 
 builder.Services.AddScoped<IProductRepository , ProductRepository>();
