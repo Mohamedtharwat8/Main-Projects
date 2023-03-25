@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 using API.Data;
+=======
+ 
+>>>>>>> Stashed changes
 using Core.interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -32,5 +36,22 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+/// Add Configuration Model Class 
+using var scope= app.Services.CreateScope();
+var Services = scope.ServiceProvider;
+var context = Services.GetRequiredService<StoreContext>();  
+var Logger = Services.GetRequiredService<ILogger<Program>>();
+
+try
+{
+    await context.Database.MigrateAsync();  
+    await StoreContextSeed.SeedAsync(context);
+}
+catch(Exception ex)
+{
+    Logger.LogError(ex, "Error Occured While Migrating Process");
+}
+
 
 app.Run();
