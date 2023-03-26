@@ -1,6 +1,7 @@
  
 using Core.interfaces;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +18,8 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 });
 
 ///dotnet ef migrations add initialCreate -o Data/Migrations
-
-builder.Services.AddScoped<IProductRepository , ProductRepository>();
+/// 
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 
@@ -35,14 +36,14 @@ app.UseAuthorization();
 app.MapControllers();
 
 /// Add Configuration Model Class 
-using var scope= app.Services.CreateScope();
+using var scope = app.Services.CreateScope();
 var Services = scope.ServiceProvider;
-var context = Services.GetRequiredService<StoreContext>();  
+var context = Services.GetRequiredService<StoreContext>(); 
 var Logger = Services.GetRequiredService<ILogger<Program>>();
 
 try
 {
-    await context.Database.MigrateAsync();  
+    await context.Database.MigrateAsync();
     await StoreContextSeed.SeedAsync(context);
 }
 catch(Exception ex)
