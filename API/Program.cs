@@ -20,6 +20,11 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 ///dotnet ef migrations add initialCreate -o Data/Migrations
 /// 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+//builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(IGenericRepository<>));
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+//builder.Services.AddScoped(typeof(IGenericRepository), typeof(IGenericRepository<,>));
+
 
 var app = builder.Build();
 
