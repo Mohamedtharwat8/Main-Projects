@@ -1,5 +1,6 @@
 ﻿
 using API.Dtos;
+using AutoMapper;
 using Core.Entities;
 using Core.interfaces;
 using Core.Specifications;
@@ -12,23 +13,26 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductController : BaseApiController
     {
         private readonly IProductRepository _iProductRepository;
         private readonly IGenericRepository<ProductBrand> _ProductBrandRepo;
         private readonly IGenericRepository<ProductType> _ProductTypeRepo;
         private readonly IGenericRepository<Product> _ProductRepo;
+        private readonly Mapper _mapper;
         public ProductController(
             IProductRepository iProductRepository,
             IGenericRepository<ProductBrand> ProductBrandRepo,
             IGenericRepository<ProductType> ProductTypeRepo,
-            IGenericRepository<Product> ProductRepo
+            IGenericRepository<Product> ProductRepo,
+            Mapper mapper
             )
         {
             _iProductRepository = iProductRepository;
             _ProductBrandRepo = ProductBrandRepo;
             _ProductTypeRepo = ProductTypeRepo;
             _ProductRepo = ProductRepo;
+            _mapper = mapper;
 
 
         }
@@ -38,16 +42,17 @@ namespace API.Controllers
         {
             var spec = new ProductWithTypesAndBrandsSpecification();
             var product = await _ProductRepo.ListAsync(spec);
-            return product.Select(product => new ProductToReturnDto()
-            {
-                Id = product.Id,
-                Description = product.Description,
-                Name = product.Name,
-                PictureUrl = product.PictureUrl,
-                Price = product.Price,
-                ProductBrand = product.ProductBrand.Name,
-                ProductType = product.ProductType.Name
-            }).ToList();
+            return Ok(_mapper.Map<IReadOnlyList<Product>,IReadOnlyList<ProductToReturnDto>>(product)); 
+            //return product.Select(product => new ProductToReturnDto()
+            //{
+            //    Id = product.Id,
+            //    Description = product.Description,
+            //    Name = product.Name,
+            //    PictureUrl = product.PictureUrl,
+            //    Price = product.Price,
+            //    ProductBrand = product.ProductBrand.Name,
+            //    ProductType = product.ProductType.Name
+            //}).ToList();
 
         }
         [HttpGet("{id}")]
@@ -56,16 +61,17 @@ namespace API.Controllers
             var spec = new ProductWithTypesAndBrandsSpecification(id);
 
             var product = await _ProductRepo.GetEntityWithSpec(spec);
-            return new ProductToReturnDto()
-            {
-                Id = product.Id,
-                Description = product.Description,
-                Name = product.Name,
-                PictureUrl = product.PictureUrl,
-                Price = product.Price,
-                ProductBrand = product.ProductBrand.Name,
-                ProductType = product.ProductType.Name
-            };
+            return _mapper.Map<ProductToReturnDto>(product);
+            //return new ProductToReturnDto()
+            //{
+            //    Id = product.Id,
+            //    Description = product.Description,
+            //    Name = product.Name,
+            //    PictureUrl = product.PictureUrl,
+            //    Price = product.Price,
+            //    ProductBrand = product.ProductBrand.Name,
+            //    ProductType = product.ProductType.Name
+            //};
 
         }
 

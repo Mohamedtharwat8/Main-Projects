@@ -23,7 +23,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 //builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(IGenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-//builder.Services.AddScoped(typeof(IGenericRepository), typeof(IGenericRepository<,>));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 var app = builder.Build();
@@ -34,8 +34,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseHttpsRedirection();
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseAuthorization();
 
 app.MapControllers();
