@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class BuggyController : BaseApiController
     {
         private readonly StoreContext  _storeContext;
@@ -35,7 +35,7 @@ namespace API.Controllers
         [HttpGet("badrequest")]
         public IActionResult GetBadRequest()
         {
-
+             
             return BadRequest(new ApiResponse(400));
 
         }
